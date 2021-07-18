@@ -12,12 +12,15 @@ import org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionPro
 import org.hibernate.engine.jdbc.connections.spi.AbstractMultiTenantConnectionProvider;
 import org.hibernate.engine.jdbc.connections.spi.ConnectionProvider;
 
-import com.deviniti.multitenancy.separate.schema.configuration.multitenancy.context.TenantContext;
+import com.deviniti.multitenancy.separate.schema.tenant.TenantContext;
+import com.deviniti.multitenancy.separate.schema.tenant.model.dto.DataSourceDTO;
+import com.deviniti.multitenancy.separate.schema.tenant.model.dto.TenantDTO;
 
 @SuppressWarnings("serial")
 public class SchemaMultiTenantConnectionProvider extends AbstractMultiTenantConnectionProvider {
 	
 	private static final String HIBERNATE_PROPERTIES_PATH = "/application.properties";
+	private static final String DEFAULT_SCHEMA_NAME = "public";
 	private final Map<String, ConnectionProvider> connectionProviderMap;
 
 	public SchemaMultiTenantConnectionProvider() {
@@ -27,7 +30,7 @@ public class SchemaMultiTenantConnectionProvider extends AbstractMultiTenantConn
 	@Override
 	public Connection getConnection(String tenantIdentifier) throws SQLException {
 		Connection connection = super.getConnection(tenantIdentifier);
-		connection.createStatement().execute(String.format("SET SCHEMA '%s';", tenantIdentifier));
+		connection.createStatement().execute(String.format("SET SCHEMA '%s';", getTenantSchema()));
 		return connection;
 	}
 	
@@ -39,6 +42,13 @@ public class SchemaMultiTenantConnectionProvider extends AbstractMultiTenantConn
 	@Override
 	protected ConnectionProvider selectConnectionProvider(String tenantIdentifier) {
 		return getConnectionProvider(tenantIdentifier);
+	}
+	
+	private String getTenantSchema() {
+		return Optional.ofNullable(TenantContext.getCurrentTenant())
+				.map(TenantDTO::getDataSource)
+				.map(DataSourceDTO::getSchemaName)
+				.orElse(DEFAULT_SCHEMA_NAME);
 	}
 	
 	private ConnectionProvider getConnectionProvider(String tenantIdentifier) {

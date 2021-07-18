@@ -1,6 +1,7 @@
 package com.deviniti.multitenancy.separate.schema.security.domain;
 
 import java.text.ParseException;
+import java.util.Arrays;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,10 +18,10 @@ public class JwtDecoder {
 	private final String jwtToken;
 	
 	public JwtDecoder(HttpServletRequest request) {
-			this.jwtToken = Optional.ofNullable(request)
+		this.jwtToken = Optional.ofNullable(request)
 					.map(req -> req.getHeader(AUTHORIZATION))
-					.filter(headerWithToken -> headerWithToken.contains(JWT_TOKEN_LABEL))
-	    			.map(headerWithToken -> headerWithToken.substring(headerWithToken.indexOf(JWT_TOKEN_LABEL)+JWT_TOKEN_LABEL.length()+1))
+//					.filter(headerWithToken -> headerWithToken.contains(JWT_TOKEN_LABEL))
+//	    			.map(headerWithToken -> headerWithToken.substring(headerWithToken.indexOf(JWT_TOKEN_LABEL)+JWT_TOKEN_LABEL.length()+1))
 	    			.map(token -> token.trim())
 	                .orElseThrow(() -> {
 	                    return new CredentialsException("Missing Authentication Token");

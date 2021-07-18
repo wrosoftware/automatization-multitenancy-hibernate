@@ -9,17 +9,19 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.AsyncHandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.deviniti.multitenancy.separate.schema.configuration.multitenancy.context.TenantContext;
 import com.deviniti.multitenancy.separate.schema.security.domain.SecurityDomain;
+import com.deviniti.multitenancy.separate.schema.tenant.TenantContext;
+import com.deviniti.multitenancy.separate.schema.tenant.TenantDomain;
+
+import lombok.AllArgsConstructor;
 
 @Component
+@AllArgsConstructor
 public class TenantRequestInterceptor implements AsyncHandlerInterceptor{
 	
-	private SecurityDomain securityDomain;
+	private final SecurityDomain securityDomain;
+	private final TenantDomain tenantDomain;
 	
-	public TenantRequestInterceptor(SecurityDomain securityDomain) {
-		this.securityDomain = securityDomain;
-	}
 
 	 @Override
 	    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
@@ -35,7 +37,6 @@ public class TenantRequestInterceptor implements AsyncHandlerInterceptor{
 	    }
 	    
 	    private boolean setTenantContext(String tenant) {
-	    	TenantContext.setCurrentTenant(tenant);
-	    	return true;
+	    	return tenantDomain.setTenantInContext(tenant);
 	    }
 }

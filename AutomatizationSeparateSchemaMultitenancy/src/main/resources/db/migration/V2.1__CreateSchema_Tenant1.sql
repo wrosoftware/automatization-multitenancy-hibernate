@@ -1,7 +1,7 @@
-CREATE SCHEMA tenant1
+CREATE SCHEMA schema_tenant_1
     AUTHORIZATION postgres;
 
-CREATE TABLE tenant1.address
+CREATE TABLE schema_tenant_1.address
 (
     id bigint NOT NULL,
     city character varying(255) COLLATE pg_catalog."default",
@@ -17,10 +17,10 @@ WITH (
 )
 TABLESPACE pg_default;
 
-ALTER TABLE tenant1.address
+ALTER TABLE schema_tenant_1.address
     OWNER to postgres;
     
-CREATE TABLE tenant1.customer
+CREATE TABLE schema_tenant_1.customer
 (
     id bigint NOT NULL,
     login character varying(255) COLLATE pg_catalog."default",
@@ -30,7 +30,7 @@ CREATE TABLE tenant1.customer
     address_id bigint,
     CONSTRAINT customer_pkey PRIMARY KEY (id),
     CONSTRAINT fkglkhkmh2vyn790ijs6hiqqpi FOREIGN KEY (address_id)
-        REFERENCES tenant1.address (id) MATCH SIMPLE
+        REFERENCES schema_tenant_1.address (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 )
@@ -39,10 +39,10 @@ WITH (
 )
 TABLESPACE pg_default;
 
-ALTER TABLE tenant1.customer
+ALTER TABLE schema_tenant_1.customer
     OWNER to postgres;
 
-CREATE TABLE tenant1.warehouse
+CREATE TABLE schema_tenant_1.warehouse
 (
     id bigint NOT NULL,
     amount numeric(19,2),
@@ -53,12 +53,12 @@ WITH (
 )
 TABLESPACE pg_default;
 
-ALTER TABLE tenant1.warehouse
+ALTER TABLE schema_tenant_1.warehouse
     OWNER to postgres;
     
 
     
-CREATE TABLE tenant1.product
+CREATE TABLE schema_tenant_1.product
 (
     id bigint NOT NULL,
     description character varying(255) COLLATE pg_catalog."default",
@@ -67,7 +67,7 @@ CREATE TABLE tenant1.product
     warehouse_id bigint,
     CONSTRAINT product_pkey PRIMARY KEY (id),
     CONSTRAINT fkk6edvfdkq61mjhltx856ncs3x FOREIGN KEY (warehouse_id)
-        REFERENCES tenant1.warehouse (id) MATCH SIMPLE
+        REFERENCES schema_tenant_1.warehouse (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 )
@@ -76,16 +76,16 @@ WITH (
 )
 TABLESPACE pg_default;
 
-ALTER TABLE tenant1.product
+ALTER TABLE schema_tenant_1.product
     OWNER to postgres;
     
-CREATE TABLE tenant1.sale
+CREATE TABLE schema_tenant_1.sale
 (
     id bigint NOT NULL,
     customer_id bigint,
     CONSTRAINT sale_pkey PRIMARY KEY (id),
     CONSTRAINT fkjw88ojfoqquyd9f1obip1ar0g FOREIGN KEY (customer_id)
-        REFERENCES tenant1.customer (id) MATCH SIMPLE
+        REFERENCES schema_tenant_1.customer (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 )
@@ -94,19 +94,19 @@ WITH (
 )
 TABLESPACE pg_default;
 
-ALTER TABLE tenant1.sale
+ALTER TABLE schema_tenant_1.sale
     OWNER to postgres;
     
-CREATE TABLE tenant1.sale_product
+CREATE TABLE schema_tenant_1.sale_product
 (
     sale_id bigint NOT NULL,
     product_id bigint NOT NULL,
     CONSTRAINT fk4dtibi1vwxkx8gjs59nhp0cnq FOREIGN KEY (sale_id)
-        REFERENCES tenant1.sale (id) MATCH SIMPLE
+        REFERENCES schema_tenant_1.sale (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION,
     CONSTRAINT fkrtwiisrmdqeslt86pacdwwn1o FOREIGN KEY (product_id)
-        REFERENCES tenant1.product (id) MATCH SIMPLE
+        REFERENCES schema_tenant_1.product (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 )
@@ -115,6 +115,6 @@ WITH (
 )
 TABLESPACE pg_default;
 
-ALTER TABLE tenant1.sale_product
+ALTER TABLE schema_tenant_1.sale_product
     OWNER to postgres;
  
