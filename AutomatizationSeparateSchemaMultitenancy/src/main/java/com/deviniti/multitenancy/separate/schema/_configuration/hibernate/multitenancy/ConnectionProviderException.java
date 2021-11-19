@@ -1,4 +1,4 @@
-package com.deviniti.multitenancy.separate.schema.configuration.hibernate.multitenancy;
+package com.deviniti.multitenancy.separate.schema._configuration.hibernate.multitenancy;
 
 public class ConnectionProviderException extends RuntimeException{
 

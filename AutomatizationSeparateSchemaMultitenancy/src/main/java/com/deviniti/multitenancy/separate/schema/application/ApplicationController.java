@@ -7,14 +7,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("api/application")
+@RequestMapping("/application")
 public class ApplicationController {
 
 	@Value("${application.version}")
 	private String applicationVersion;
 	
-	@GetMapping("version")
+	@GetMapping("/version")
 	public ResponseEntity<String> getVersion(){
 		return ResponseEntity.ok(applicationVersion);
 	}
+	
 }

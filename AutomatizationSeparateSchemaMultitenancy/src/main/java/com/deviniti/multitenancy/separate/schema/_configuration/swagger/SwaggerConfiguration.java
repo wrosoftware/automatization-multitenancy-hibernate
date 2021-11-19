@@ -1,4 +1,4 @@
-package com.deviniti.multitenancy.separate.schema.configuration.swagger;
+package com.deviniti.multitenancy.separate.schema._configuration.swagger;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;

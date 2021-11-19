@@ -1,4 +1,4 @@
-package com.deviniti.multitenancy.separate.schema.configuration.spring.multitenancy;
+package com.deviniti.multitenancy.separate.schema._configuration.spring.multitenancy;
 
 import java.util.Optional;
 
@@ -13,21 +13,22 @@ import com.deviniti.multitenancy.separate.schema.security.domain.SecurityDomain;
 import com.deviniti.multitenancy.separate.schema.tenant.TenantContext;
 import com.deviniti.multitenancy.separate.schema.tenant.TenantDomain;
 
-import lombok.AllArgsConstructor;
-
 @Component
-@AllArgsConstructor
 public class TenantRequestInterceptor implements AsyncHandlerInterceptor{
 	
-	private final SecurityDomain securityDomain;
-	private final TenantDomain tenantDomain;
+	private SecurityDomain securityDomain;
+	private TenantDomain tenantDomain;
 	
+	public TenantRequestInterceptor(SecurityDomain securityDomain, TenantDomain tenantDomain) {
+		this.securityDomain = securityDomain;
+		this.tenantDomain = tenantDomain;
+	}
 
 	 @Override
 	    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
 		 return Optional.ofNullable(request)
-				 .map(req -> securityDomain.getTenantIdFromJwt(req))
-				 .map(tenant -> setTenantContext(tenant))
+				 .map(securityDomain::getTenantIdFromJwt)
+				 .map(tenantDomain::setTenantInContext)
 				 .orElse(false);
 	    }
 
@@ -36,7 +37,5 @@ public class TenantRequestInterceptor implements AsyncHandlerInterceptor{
 	        TenantContext.clear();
 	    }
 	    
-	    private boolean setTenantContext(String tenant) {
-	    	return tenantDomain.setTenantInContext(tenant);
-	    }
 }
+
