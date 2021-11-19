@@ -1,4 +1,4 @@
-package com.deviniti.multitenancy.separate.schema.configuration.hibernate.multitenancy;
+package com.deviniti.multitenancy.separate.schema._configuration.hibernate.multitenancy;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -11,12 +11,14 @@ import java.util.Properties;
 import org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl;
 import org.hibernate.engine.jdbc.connections.spi.AbstractMultiTenantConnectionProvider;
 import org.hibernate.engine.jdbc.connections.spi.ConnectionProvider;
+import org.springframework.stereotype.Component;
 
 import com.deviniti.multitenancy.separate.schema.tenant.TenantContext;
 import com.deviniti.multitenancy.separate.schema.tenant.model.dto.DataSourceDTO;
 import com.deviniti.multitenancy.separate.schema.tenant.model.dto.TenantDTO;
 
 @SuppressWarnings("serial")
+@Component
 public class SchemaMultiTenantConnectionProvider extends AbstractMultiTenantConnectionProvider {
 	
 	private static final String HIBERNATE_PROPERTIES_PATH = "/application.properties";

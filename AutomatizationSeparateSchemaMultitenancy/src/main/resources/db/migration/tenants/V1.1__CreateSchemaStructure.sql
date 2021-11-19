@@ -16,6 +16,10 @@ TABLESPACE pg_default;
 
 ALTER TABLE address
     OWNER to postgres;
+
+GRANT INSERT, SELECT, UPDATE, DELETE, REFERENCES ON TABLE public.tenant TO multi_tenant;
+
+GRANT ALL ON TABLE public.tenant TO postgres;
     
 CREATE TABLE customer
 (
@@ -38,6 +42,10 @@ TABLESPACE pg_default;
 
 ALTER TABLE customer
     OWNER to postgres;
+    
+GRANT INSERT, SELECT, UPDATE, DELETE, REFERENCES ON TABLE public.tenant TO multi_tenant;
+
+GRANT ALL ON TABLE public.tenant TO postgres;
 
 CREATE TABLE warehouse
 (
@@ -53,6 +61,9 @@ TABLESPACE pg_default;
 ALTER TABLE warehouse
     OWNER to postgres;
     
+GRANT INSERT, SELECT, UPDATE, DELETE, REFERENCES ON TABLE public.tenant TO multi_tenant;
+
+GRANT ALL ON TABLE public.tenant TO postgres;
 
     
 CREATE TABLE product
@@ -76,6 +87,11 @@ TABLESPACE pg_default;
 ALTER TABLE product
     OWNER to postgres;
     
+GRANT INSERT, SELECT, UPDATE, DELETE, REFERENCES ON TABLE public.tenant TO multi_tenant;
+
+GRANT ALL ON TABLE public.tenant TO postgres;
+    
+    
 CREATE TABLE sale
 (
     id bigint NOT NULL,
@@ -93,6 +109,11 @@ TABLESPACE pg_default;
 
 ALTER TABLE sale
     OWNER to postgres;
+    
+GRANT INSERT, SELECT, UPDATE, DELETE, REFERENCES ON TABLE public.tenant TO multi_tenant;
+
+GRANT ALL ON TABLE public.tenant TO postgres;
+    
     
 CREATE TABLE sale_product
 (
@@ -115,17 +136,6 @@ TABLESPACE pg_default;
 ALTER TABLE sale_product
     OWNER to postgres;
     
-    
-CREATE TABLE tenant
-(
-    tenant_id character varying(255) COLLATE pg_catalog."default" NOT NULL,
-    schema_name character varying(255) COLLATE pg_catalog."default",
-    CONSTRAINT tenant_pkey PRIMARY KEY (tenant_id)
-)
-WITH (
-    OIDS = FALSE
-)
-TABLESPACE pg_default;
+GRANT INSERT, SELECT, UPDATE, DELETE, REFERENCES ON TABLE public.tenant TO multi_tenant;
 
-ALTER TABLE tenant
-    OWNER to postgres;
+GRANT ALL ON TABLE public.tenant TO postgres;
