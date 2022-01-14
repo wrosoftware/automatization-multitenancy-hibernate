@@ -1,13 +1,10 @@
 package com.deviniti.multitenancy.separate.schema._configuration.flayway;
 
-import java.io.IOException;
-import java.util.Properties;
-
 import javax.sql.DataSource;
 
 import org.apache.commons.dbcp.BasicDataSource;
 import org.flywaydb.core.Flyway;
-import org.hibernate.cfg.Environment;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,15 +15,22 @@ import com.deviniti.multitenancy.separate.schema.tenant.TenantDomain;
 @Configuration
 class FlywayConfiguration {
 	
-	private static final String APPLICATION_PROPERTIES_PATH = "/application.properties";
-	private static final String FLYWAY_URL_KEY = "flyway.url";
-	private static final String FLYWAY_USER_KEY = "flyway.user";
-	private static final String FLYWAY_PASSWORD_KEY = "flyway.password";
-	private static final String FLYWAY_DRIVER_CLASS = "spring.datasource.driverClassName";
+	private final String flywayUrl;
+	private final String flywayUser;
+	private final String flywayPassword;
+	private final String flywayDriver;
 	
 	DataSource dataSource;
 	
-	public FlywayConfiguration(DataSource dataSource) {
+	public FlywayConfiguration(DataSource dataSource,
+			@Value("${flyway.url}") String flywayUrl,
+			@Value("${flyway.user}") String flywayUser,
+			@Value("${flyway.password}") String flywayPassword,
+			@Value("${spring.datasource.driverClassName}") String flywayDriver) {
+		this.flywayUrl = flywayUrl;
+		this.flywayUser = flywayUser;
+		this.flywayPassword = flywayPassword;
+		this.flywayDriver = flywayDriver;
 		this.dataSource = createFlywayDataSource();
 	}
 
@@ -53,22 +57,12 @@ class FlywayConfiguration {
     }
 	
 	private DataSource createFlywayDataSource() {
-		Properties properties = getPropertiesForFlyway();
 		BasicDataSource dataSource = new BasicDataSource();
-		dataSource.setDriverClassName(properties.getProperty(FLYWAY_DRIVER_CLASS));
-		dataSource.setUrl(properties.getProperty(FLYWAY_URL_KEY));
-		dataSource.setUsername(properties.getProperty(FLYWAY_USER_KEY));
-		dataSource.setPassword(properties.getProperty(FLYWAY_PASSWORD_KEY));
+		dataSource.setDriverClassName(flywayDriver);
+		dataSource.setUrl(flywayUrl);
+		dataSource.setUsername(flywayUser);
+		dataSource.setPassword(flywayPassword);
 		return dataSource;
 	}
 	
-	private Properties getPropertiesForFlyway() {
-        try {
-        	Properties properties = new Properties();
-			properties.load(getClass().getResourceAsStream(APPLICATION_PROPERTIES_PATH));
-			return properties;
-		} catch (IOException e) {
-			throw new RuntimeException("Cannot open hibernate properties: "+ APPLICATION_PROPERTIES_PATH);
-		}
-	}
 }
